@@ -1,0 +1,36 @@
+version: '3.5'
+services:
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tar-incremental-backup
+    container_name: tar-incremental-backup-test-container
+    environment:
+      # force flag 0/1
+      FORCE_FLAG_STATE: "1"
+      # backup mode yearly/monthly/weekly/daily
+      BACKUP_MODE: "yearly"
+    restart: "no"
+    volumes:
+      # backup source catalog
+      - ./source:/backup_source
+      # backup output catalog
+      - ./output:/backup_output
+
+  debugger:
+    build:
+      context: .
+      dockerfile: .develop/Dockerfile.dev
+    image: tar-incremental-backup
+    container_name: tar-incremental-backup-test-container
+    environment:
+      # application mode (deprecated)
+      __APPLICATION_MODE__: "docker"
+      #DEBUGGER_CMD: "set_days 25"
+    restart: "no"
+    volumes:
+      # backup source catalog
+      - ./source:/backup_source
+      # backup output catalog
+      - ./output:/backup_output
